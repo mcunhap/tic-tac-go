@@ -11,35 +11,35 @@ func Run() {
 	var err error
 
 	for {
-		if game.round%2 == 0 {
-			game.currentPlayer = game.firstPlayer
+		if game.state.round%2 == 0 {
+			game.state.currentPlayer = game.firstPlayer
 		} else {
-			game.currentPlayer = game.secondPlayer
+			game.state.currentPlayer = game.secondPlayer
 		}
 
 		for validMove := false; validMove == false; {
-			game.currentMove, err = game.currentPlayer.AskMove()
+			game.state.currentMove, err = game.state.currentPlayer.AskMove()
 
 			if err != nil {
 				fmt.Println(err)
 				return
 			}
 
-			validMove, err = game.currentMove.validate(game.board)
+			validMove, err = game.state.currentMove.validate(game.state.board)
 
 			if err != nil {
 				fmt.Println(err)
 			}
 		}
 
-		game.currentMove.execute(&game.board, game.currentPlayer.piece)
+		game.state.currentMove.execute(&game.state.board, game.state.currentPlayer.piece)
 
-		game.Display()
+		Display(game.state)
 
-		if game.Finished() {
+		if game.state.Finished() {
 			break
 		}
 
-		game.round++
+		game.state.round++
 	}
 }
